@@ -1,0 +1,38 @@
+{
+    "package_name": "com.superpaopao.zhuoli",
+    "version": "",
+    "support": "omni_cn",
+    "plugin": [],
+    "channel": [
+        {
+            "id": 10038,
+            "channel_name": "ios_jinshanApple",
+            "class_name": "",
+            "description": "",
+            "artifactId": "",
+            "version": "4.3.9"
+        }
+    ],
+    "project": {
+        "AppID": "10152",
+        "SgBuildNumber": "20220617014351",
+        "SharedPassword": "d374471724ec4181ba9c186abb7cceb2",
+        "XgDataUrl": "https://xgdata.xgsdk.com",
+        "appKey": "kmPfqkUoVFNEmoUN",
+        "appServerKey": "wQZqUMECpvEbcdjf",
+        "appleSignin": "true",
+        "bid": "com.superpaopao.zhuoli",
+        "debugMode": "false",
+        "minimumOSVersion": "true",
+        "package_name": "com.superpaopao.zhuoli",
+        "sdk_app_id": "111111650",
+        "sdk_app_key": "007b2e0fe58f4b798399ffbb6ce45ea8",
+        "sdk_channel_id": "10038",
+        "sdk_channel_name": "ios_jinshanApple",
+        "sdk_env": "{\"sdkserver\":\"https://cnks3.xoyo.com\",\"sdklog\":\"http://tol.jx3.xoyo.com:6015/i/kspsdk\"}",
+        "sdk_host_domain": "https://a2.xgsdk.seayoo.com/",
+        "sdk_plan_id": "200015",
+        "xgPayNotifyUrl": "https://a2.xgsdk.seayoo.com/pay-notify/ios_jinshanApple/111111650/v1"
+    },
+    "channel_res": []
+}
