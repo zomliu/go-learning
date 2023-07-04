@@ -3,18 +3,44 @@ package test
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 	"unicode"
+)
 
-	"github.com/spf13/cast"
+type (
+	People struct {
+		Name string
+		Age  int64
+	}
 )
 
 func TestSwitch(t *testing.T) {
-	u, _ := url.Parse("http://www.baidu.com")
-	t.Log(u.Hostname())
+	// get me a httptest.NewServer expmple
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// wirete http 200 to response
+		w.WriteHeader(http.StatusOK)
+		// write hello world to response
+		w.Write([]byte("Hello World"))
+	}))
+	defer server.Close()
 
+	server.Client()
+}
+
+func TestMapModify(t *testing.T) {
+	m := make(map[string]People)
+
+	p1 := People{Name: "aa", Age: 20}
+
+	fmt.Printf("%p \n", &p1)
+
+	m[p1.Name] = p1
+
+	p2 := m[p1.Name]
+	fmt.Printf("%p \n", &p2)
 }
 
 func TestCurrencyCode(t *testing.T) {
@@ -247,11 +273,6 @@ func demo1() {
 
 	s := strings.Fields(ip)
 	fmt.Printf("lenght: %d, value: %v", len(s), s)
-}
-
-func demo2() {
-	i := cast.ToInt64("12abc")
-	fmt.Println(i)
 }
 
 func TestSlice(t *testing.T) {

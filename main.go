@@ -2,6 +2,7 @@ package main
 
 import (
 	"demo/handler"
+	"fmt"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -9,21 +10,31 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var passportDB *gorm.DB
-
-func init() {
-	initPassportDB()
-}
+var mysqlDB *gorm.DB
 
 func main() {
-	handler.ReadFileAndQueryExtData(passportDB)
+	processOmniServerReader()
+	//processPassportReader()
+	//handler.QueryIPLocal()
 }
 
-func initPassportDB() {
-	dsn := "passport_r:XR7IhUROoZF1QaWIGZvX8H6tt@tcp(127.0.0.1:3406)/ks_sdk_server?charset=utf8&parseTime=True&loc=UTC"
+func processOmniServerReader() {
+	initDB("xg_readonly", "NIk8NnUjiLJkfA", "127.0.0.1", "3336", "xgsdk_db")
+	//handler.WriteOrderToFile(mysqlDB)
+	handler.QuerySpecificOrder(mysqlDB)
+}
+
+func processPassportReader() {
+	initDB("passport_r", "XR7IhUROoZF1QaWIGZvX8H6tt", "127.0.0.1", "3406", "ks_sdk_server")
+	handler.ReadFileAndQueryExtData(mysqlDB)
+}
+
+func initDB(userName, password, host, port, dbName string) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", userName, password, host, port, dbName)
+	//dsn := "passport_r:XR7IhUROoZF1QaWIGZvX8H6tt@tcp(127.0.0.1:3406)/ks_sdk_server?charset=utf8&parseTime=True&loc=UTC"
 	dialect := mysql.Open(dsn)
 	c, err := gorm.Open(dialect, &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn), // 打印更多日志，包括所有 SQL 输出，设置为 warn 则只打印慢 SQL
+		Logger: logger.Default.LogMode(logger.Info), // 打印更多日志，包括所有 SQL 输出，设置为 warn 则只打印慢 SQL
 	})
 	if err != nil {
 		panic(err)
@@ -37,5 +48,5 @@ func initPassportDB() {
 	} else {
 		panic(err)
 	}
-	passportDB = c
+	mysqlDB = c
 }

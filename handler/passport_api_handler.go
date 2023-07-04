@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func GetPassportDetail(passportId, env string) (string, error) {
+func GetPassportDetail(passportId, env string) (string, string, error) {
 	apiUrl := "http://img-pass.seasungame.com:8080/pass/query/user-detail"
 	authAppId := "xigua_bj"
 	signKey := "V9vF7qe5uag0p50WlhM"
@@ -31,7 +31,7 @@ func GetPassportDetail(passportId, env string) (string, error) {
 	http.DefaultClient.Timeout = 5 * time.Second
 	resp, err := http.Post(apiUrl, "application/json", bytes.NewBuffer(jsonValue))
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	defer resp.Body.Close()
 	infoByte, _ := io.ReadAll(resp.Body)
@@ -43,17 +43,18 @@ func GetPassportDetail(passportId, env string) (string, error) {
 		Data    struct {
 			AccountOpenId string `json:"accountOpenId"`
 			Account       string `json:"account"`
+			BindMobile    string `json:"bindMobile"`
 		}
 	}
 	if err = json.Unmarshal([]byte(infoStr), &result); err != nil {
 		fmt.Printf("json error: %v", err)
-		return "", err
+		return "", "", err
 	}
 	if result.Code == 1 {
-		return result.Data.AccountOpenId, nil
+		return result.Data.AccountOpenId, result.Data.BindMobile, nil
 	}
 	fmt.Printf("Code: %d, Message: %s", result.Code, result.Message)
-	return result.Message, nil
+	return result.Message, "", errors.New("query failed")
 }
 
 func GetPassportOpenId(passportId, env string) (string, error) {

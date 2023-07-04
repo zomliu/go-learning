@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"demo/handler/common"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -13,8 +14,8 @@ import (
 )
 
 const (
-	source_file = "/Users/leon/Downloads/moyu2.csv"
-	target_file = "/Users/leon/Downloads/moyu2-result.csv"
+	source_file = "/Users/leon/Downloads/paopao_05.csv"
+	target_file = "/Users/leon/Downloads/paopao_05_result.csv"
 )
 
 func processPassportData(db *gorm.DB, result []string) {
@@ -24,10 +25,13 @@ func processPassportData(db *gorm.DB, result []string) {
 		if playerId == "" {
 			continue
 		}
+		index := strings.Index(playerId, "__")
+		realPlayerId := playerId[index+2:]
+		//realPlayerId := playerId
 		var ret struct {
 			PassportId string `gorm:"column:passport_id"`
 		}
-		err := db.Table("SDK_EXP_PLAYER").Where("exp_player_id=?", playerId).Select("passport_id").First(&ret).Error
+		err := db.Table("SDK_EXP_PLAYER").Where("exp_player_id=?", realPlayerId).Select("passport_id").First(&ret).Error
 		if err != nil {
 			if errors.Is(gorm.ErrRecordNotFound, err) {
 				fmt.Printf("No record found: %s", playerId)
@@ -36,7 +40,12 @@ func processPassportData(db *gorm.DB, result []string) {
 			fmt.Printf("query from db error: %v", err)
 			return
 		}
-		retMap[playerId] = ret.PassportId
+		if !common.IsDigit(ret.PassportId) {
+			//fmt.Printf("passport_id is not phone number: %s \n", ret.PassportId)
+			continue
+		} else {
+			retMap[playerId] = ret.PassportId
+		}
 	}
 	if len(retMap) > 0 {
 		writeFile(retMap)
@@ -66,10 +75,7 @@ func ReadFileAndQueryExtData(db *gorm.DB) {
 			break
 		}
 
-		tmp := row[0]
-		index := strings.Index(tmp, "__")
-		val := tmp[index+2:]
-		result = append(result, val)
+		result = append(result, row[0])
 
 		loop += 1
 		if loop >= batchSize {

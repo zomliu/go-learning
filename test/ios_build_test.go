@@ -105,12 +105,12 @@ func TestGe(t *testing.T) {
 		// paopao
 		//appId  = "111111650"
 		//appKey = "007b2e0fe58f4b798399ffbb6ce45ea8"
-		//planId = "200072"
+		//planId = "200170"
 
 		// moyu
 		//appId  = "15985"
 		//appKey = "25c9b673be984a78844a6a14417e6311"
-		//planId = "200077"
+		//planId = "200178"
 
 		// 风暴魔域2
 		//appId  = "111111624"
@@ -125,12 +125,12 @@ func TestGe(t *testing.T) {
 		// 幻影战争
 		//appId  = "111111634"
 		//appKey = "e1856655015d4e8b973f8ea4cb040511"
-		//planId = "200089"
+		//planId = "200147"
 
 		// 魔域2
 		appId  = "200000000"
 		appKey = "55a4fd2aa48c4273872eeeabb0680a73"
-		planId = "200103"
+		planId = "200187"
 	)
 
 	paramMap := map[string]string{

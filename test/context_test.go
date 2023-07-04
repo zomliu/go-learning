@@ -35,7 +35,7 @@ func TestContext(t *testing.T) {
 }
 
 func context1() {
-	ctx, _ := context.WithTimeout(context.TODO(), 5*time.Second)
+	ctx, f := context.WithTimeout(context.TODO(), 5*time.Second)
 	for i := 0; i < 2; i++ {
 		go func() {
 			fmt.Println("go routine start...")
@@ -47,6 +47,7 @@ func context1() {
 			}
 		}()
 	}
+	f()
 
 	time.Sleep(6 * time.Second)
 }
