@@ -14,9 +14,44 @@ import (
 )
 
 const (
-	source_file = "/Users/leon/Downloads/paopao_05.csv"
-	target_file = "/Users/leon/Downloads/paopao_05_result.csv"
+	source_file = "/Users/leon/Downloads/moyu_0926_14.csv"
+	target_file = "/Users/leon/Downloads/moyu_0926_14_result.csv" // create manually is not exists
 )
+
+func ReadFileAndQueryExtData(db *gorm.DB) {
+	fs, err := os.Open(source_file)
+	if err != nil {
+		panic("read file error")
+	}
+	defer fs.Close()
+	r := csv.NewReader(fs)
+	loop := 0
+	batchSize := 50 // 批量查询 size
+	var result []string
+	//针对大文件，一行一行的读取文件
+	for {
+		var row []string
+		row, err = r.Read()
+		if err != nil && err != io.EOF {
+			log.Fatalf("can not read, err is %+v", err)
+		}
+		if err == io.EOF {
+			break
+		}
+
+		result = append(result, row[0])
+
+		loop += 1
+		if loop >= batchSize {
+			processPassportData(db, result)
+			result = nil
+			loop = 0
+		}
+	}
+	if len(result) > 0 {
+		processPassportData(db, result)
+	}
+}
 
 func processPassportData(db *gorm.DB, result []string) {
 	retMap := make(map[string]string)
@@ -51,41 +86,6 @@ func processPassportData(db *gorm.DB, result []string) {
 		writeFile(retMap)
 	} else {
 		fmt.Println("--------- No Result ------------")
-	}
-}
-
-func ReadFileAndQueryExtData(db *gorm.DB) {
-	fs, err := os.Open(source_file)
-	if err != nil {
-		panic("read file error")
-	}
-	defer fs.Close()
-	r := csv.NewReader(fs)
-	loop := 0
-	batchSize := 1000 // 批量查询 size
-	var result []string
-	//针对大文件，一行一行的读取文件
-	for {
-		var row []string
-		row, err = r.Read()
-		if err != nil && err != io.EOF {
-			log.Fatalf("can not read, err is %+v", err)
-		}
-		if err == io.EOF {
-			break
-		}
-
-		result = append(result, row[0])
-
-		loop += 1
-		if loop >= batchSize {
-			processPassportData(db, result)
-			result = nil
-			loop = 0
-		}
-	}
-	if len(result) > 0 {
-		processPassportData(db, result)
 	}
 }
 

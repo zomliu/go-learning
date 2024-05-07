@@ -14,9 +14,9 @@ import (
 func TestGeO(t *testing.T) {
 	const (
 		// 武林闲侠 Prod
-		appId  = "1239"
-		appKey = "6682570acb5647d3a5a9611b53955783"
-		planId = "233"
+		//appId  = "1239"
+		//appKey = "6682570acb5647d3a5a9611b53955783"
+		//planId = "233"
 
 		// 武林闲侠 Dev
 		//appKey = "0e42a253d75c45bf8c0e13884d80f34d"
@@ -26,13 +26,18 @@ func TestGeO(t *testing.T) {
 		//appId  = "1240"
 		//appKey = "35a88661c1d55f76782d623c440e4869"
 		//planId = "212"
+
+		// 武林闲侠 Prod
+		appId  = "1232"
+		appKey = "f7d48ee9a2a44743847e4c110bdac234"
+		planId = "238"
 	)
 
 	const (
 		channelCode = "apple"
 		region      = "oversea"
-		host        = "https://omni-build.seayoo.io/omni/build/app/release/channel/ios?app_id=%s&channel_code=%s&debug_mode=true&region=%s&release_version_id=%s&sign=%s"
-		//host = "https://omni-build.dev.seayoo.io/omni/build/app/release/channel/ios?app_id=%s&channel_code=%s&debug_mode=true&region=%s&release_version_id=%s&sign=%s"
+		//host        = "https://omni-build.seayoo.io/omni/build/app/release/channel/ios?app_id=%s&channel_code=%s&debug_mode=true&region=%s&release_version_id=%s&sign=%s"
+		host = "https://omni-build.dev.seayoo.io/omni/build/app/release/channel/ios?app_id=%s&channel_code=%s&debug_mode=true&region=%s&release_version_id=%s&sign=%s"
 	)
 
 	paramMap := map[string]string{
@@ -110,7 +115,7 @@ func TestGe(t *testing.T) {
 		// moyu
 		//appId  = "15985"
 		//appKey = "25c9b673be984a78844a6a14417e6311"
-		//planId = "200178"
+		//planId = "200189"
 
 		// 风暴魔域2
 		//appId  = "111111624"
@@ -130,7 +135,7 @@ func TestGe(t *testing.T) {
 		// 魔域2
 		appId  = "200000000"
 		appKey = "55a4fd2aa48c4273872eeeabb0680a73"
-		planId = "200187"
+		planId = "200193"
 	)
 
 	paramMap := map[string]string{

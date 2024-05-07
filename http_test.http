@@ -1,0 +1,44 @@
+### Request a ads
+POST https://api.dev.seayoo.com/v3/client/request-rewarded-ad
+Authorization: Basic b21uaXNkazpwa19Lazd0T2E1a2V1ZkVkWkNtZm9PZWwyZmZlOVdTNmZQVg==
+Accept-Language: en-US
+Content-Type: application/json
+x-timestamp-unix: 1703494716
+x-game-distro: seayoo
+x-game-platform: android
+x-sdk-version: omni-sdk-ios/3.1.2
+x-bundle-id: com.seayoo.catsnsoup
+x-bundle-version: 1.3.5
+x-device-id: 1d3986cc-9d46-4891-9ec7-71129cd4a84b
+x-device-name: My iPhone 15 Pro Max
+x-device-model: MacBookPro18,2
+x-os-type: iOS
+x-os-version: 10.0.19045
+
+{
+  "placement_id": "android_topon_test_01",
+  "ad_platform": "topon",
+  "identity_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FwaS5kZXYuc2VheW9vLmNvbSIsInN1YiI6IjkxMjMxMjIzMzQ2MTMwMDAxIiwiYXVkIjoib21uaXNkayIsImV4cCI6MTcwMzU3NDQ0MywiaWF0IjoxNzAzNDg4MDQzLCJzY29wZSI6ImF1dGgiLCJpZHAiOiJzZWF5b28iLCJleHRlcm5hbF9pZCI6IjMiLCJleHRlcm5hbF9uYW1lIjoiIiwid2VpeGluX3VuaW9uaWQiOiIifQ.jGWnpooGaxT9B2PySq_cwjd8PkcYWBBhVHIjHdbxvBY"
+}
+
+### verify ad play result
+POST https://api.dev.seayoo.com/v3/client/verify-ad-impression
+Authorization: Basic b21uaXNkazpwa19Lazd0T2E1a2V1ZkVkWkNtZm9PZWwyZmZlOVdTNmZQVg==
+Accept-Language: en-US
+Content-Type: application/json
+x-timestamp-unix: 1703494716
+x-game-distro: seayoo
+x-game-platform: android
+x-sdk-version: omni-sdk-ios/3.1.2
+x-bundle-id: com.seayoo.catsnsoup
+x-bundle-version: 1.3.5
+x-device-id: 1d3986cc-9d46-4891-9ec7-71129cd4a84b
+x-device-name: My iPhone 15 Pro Max
+x-device-model: MacBookPro18,2
+x-os-type: iOS
+x-os-version: 10.0.19045
+
+{
+  "impression_id": "31cfcd014a154ab59b377beac414672f"
+}
+
