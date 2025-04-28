@@ -1,0 +1,28 @@
+profile: china
+aws:
+  aws_endpoint_url: http://localhost:4566
+redis:
+  addrs:
+    - localhost:7001
+  enable_tls: false
+  min_idle_conns: 5
+  max_idle_conns: 5
+mysql:
+  writer_endpoint: root:localAdmin@tcp(127.0.0.1:3306)/combo_central?charset=utf8mb4&parseTime=True
+  reader_endpoints:
+    - root:localAdmin@tcp(127.0.0.1:3306)/combo_central?charset=utf8mb4&parseTime=True
+    - root:localAdmin@tcp(127.0.0.1:3306)/combo_central?charset=utf8mb4&parseTime=True
+  tls_root_ca_file_path: aws-cn-rds-global-bundle.pem
+  max_open_conns: 50
+  max_idle_conns: 10
+  skip_default_transaction: true
+otel:
+  receiver_addr: localhost:4317
+
+jenkins:
+  endpoint: http://localhost:8080
+  username: wangzhongkuo
+  password: wangzhongkuo
+  job_names:
+    serverlist: Combo/job/serverlist
+    allowlist: Combo/job/allowlist

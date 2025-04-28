@@ -3,7 +3,7 @@ package test
 import (
 	"crypto/md5"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sort"
 	"strings"
@@ -11,7 +11,7 @@ import (
 )
 
 // Oversea
-func TestGeO(t *testing.T) {
+func TestGeOversea(t *testing.T) {
 	const (
 		// 武林闲侠 Prod
 		//appId  = "1239"
@@ -78,7 +78,7 @@ func TestGeO(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	b, err2 := ioutil.ReadAll(resp.Body)
+	b, err2 := io.ReadAll(resp.Body)
 	if err2 != nil {
 		t.Error("read http response error ", err2)
 		return
@@ -88,7 +88,7 @@ func TestGeO(t *testing.T) {
 }
 
 // Domestic
-func TestGe(t *testing.T) {
+func TestGeDomestic(t *testing.T) {
 	const (
 		// is dev env or not
 		devEnv      = false
@@ -113,9 +113,9 @@ func TestGe(t *testing.T) {
 		//planId = "200170"
 
 		// moyu
-		//appId  = "15985"
-		//appKey = "25c9b673be984a78844a6a14417e6311"
-		//planId = "200189"
+		appId  = "15985"
+		appKey = "25c9b673be984a78844a6a14417e6311"
+		planId = "200272"
 
 		// 风暴魔域2
 		//appId  = "111111624"
@@ -133,9 +133,9 @@ func TestGe(t *testing.T) {
 		//planId = "200147"
 
 		// 魔域2
-		appId  = "200000000"
-		appKey = "55a4fd2aa48c4273872eeeabb0680a73"
-		planId = "200193"
+		//appId  = "200000000"
+		//appKey = "55a4fd2aa48c4273872eeeabb0680a73"
+		//planId = "200193"
 	)
 
 	paramMap := map[string]string{
@@ -175,7 +175,7 @@ func TestGe(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	b, err2 := ioutil.ReadAll(resp.Body)
+	b, err2 := io.ReadAll(resp.Body)
 	if err2 != nil {
 		t.Error("read http response error ", err2)
 		return

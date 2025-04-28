@@ -1,0 +1,28 @@
+# for combo.order dev env
+profile: china
+server:
+  host: 0.0.0.0
+  grpc_port: 7070
+  http_port: 7090
+aws:
+  aws_endpoint_url: http://127.0.0.1:4566
+  role_arn: arn:aws:iam::000000000000:root
+otel:
+  receiver_addr: 10.89.132.123:4317
+messenger:
+  topic_id: topicId
+  topic_sk: secretKey
+order:
+  webhook_endpoint: http://localhost:8090
+redis:
+  addrs:
+    - localhost:7001
+mysql:
+  writer_endpoint: root:localAdmin@tcp(localhost:3306)/combo_order?charset=utf8mb4&parseTime=True
+  reader_endpoints:
+    - root:localAdmin@tcp(localhost:3306)/combo_order?charset=utf8mb4&parseTime=True
+    - root:localAdmin@tcp(localhost:3306)/combo_order?charset=utf8mb4&parseTime=True
+  tls_root_ca_file_path: aws-cn-rds-global-bundle.pem
+grpc:
+  fangchenmi_address: 127.0.0.1:28080
+  central_address: 127.0.0.1:8080

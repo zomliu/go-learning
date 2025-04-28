@@ -15,9 +15,9 @@ var mysqlDB *gorm.DB
 
 func main() {
 	//processOmniServerReader()
-	//processPassportReader()
+	processPassportReader()
 	//handler.QueryIPLocal()
-	processPassportDataV2()
+	//processPassportDataV2()
 }
 
 func processOmniServerReader() {
@@ -34,20 +34,20 @@ func processPassportReader() {
 func processPassportDataV2() {
 	initDB("passport_r", "XR7IhUROoZF1QaWIGZvX8H6tt", "127.0.0.1", "3406", "ks_sdk_server")
 	p := &passport.PassportHandler{
-		DB: mysqlDB,
+		DB:         mysqlDB,
 		SourceFile: "/Users/leon/Downloads/moyu_data/2024_03.csv",
 		TargetFile: "/Users/leon/Downloads/moyu_data/2024_03_result.csv",
 	}
 	p.ReadFileAndQuery()
 	/*
-	for i := 1; i <= 7; i++ {
-		p := &passport.PassportHandler{
-			DB: mysqlDB,
-			SourceFile: fmt.Sprintf("/Users/leon/Downloads/moyu_data/part%d.csv", i),
-			TargetFile: fmt.Sprintf("/Users/leon/Downloads/moyu_data/part%d_result.csv", i),
+		for i := 1; i <= 7; i++ {
+			p := &passport.PassportHandler{
+				DB: mysqlDB,
+				SourceFile: fmt.Sprintf("/Users/leon/Downloads/moyu_data/part%d.csv", i),
+				TargetFile: fmt.Sprintf("/Users/leon/Downloads/moyu_data/part%d_result.csv", i),
+			}
+			p.ReadFileAndQuery()
 		}
-		p.ReadFileAndQuery()
-	}
 	*/
 }
 

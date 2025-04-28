@@ -1,11 +1,10 @@
 package handler
 
 import (
+	"bufio"
 	"demo/handler/common"
 	"encoding/csv"
-	"errors"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"strings"
@@ -13,9 +12,11 @@ import (
 	"gorm.io/gorm"
 )
 
+// 文件格式只有一个 omnisdk uid 的场景
+
 const (
-	source_file = "/Users/leon/Downloads/moyu_0926_14.csv"
-	target_file = "/Users/leon/Downloads/moyu_0926_14_result.csv" // create manually is not exists
+	source_file = "/Users/leon/Downloads/moyu/2025-03-10/20250310.csv"
+	target_file = "/Users/leon/Downloads/moyu/2025-03-10/20250310-result.csv" // create manually if not exists
 )
 
 func ReadFileAndQueryExtData(db *gorm.DB) {
@@ -24,30 +25,33 @@ func ReadFileAndQueryExtData(db *gorm.DB) {
 		panic("read file error")
 	}
 	defer fs.Close()
-	r := csv.NewReader(fs)
+
+	scanner := bufio.NewScanner(fs)
 	loop := 0
-	batchSize := 50 // 批量查询 size
+	batchSize := 10 // 批量查询 size
 	var result []string
 	//针对大文件，一行一行的读取文件
-	for {
-		var row []string
-		row, err = r.Read()
-		if err != nil && err != io.EOF {
-			log.Fatalf("can not read, err is %+v", err)
+	for scanner.Scan() {
+		line := scanner.Text()
+		// Clean the line if it contains quotes
+		if strings.Contains(line, "\"") {
+			line = strings.ReplaceAll(line, "\"", "")
 		}
-		if err == io.EOF {
-			break
-		}
+		result = append(result, line)
 
-		result = append(result, row[0])
-
-		loop += 1
+		loop++
 		if loop >= batchSize {
 			processPassportData(db, result)
 			result = nil
 			loop = 0
 		}
 	}
+
+	// Check for any scanner errors
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+
 	if len(result) > 0 {
 		processPassportData(db, result)
 	}
@@ -55,33 +59,38 @@ func ReadFileAndQueryExtData(db *gorm.DB) {
 
 func processPassportData(db *gorm.DB, result []string) {
 	retMap := make(map[string]string)
+
+	originPlayerIds := make(map[string]string)
+	var playerIds []string
 	for i := range result {
 		playerId := result[i]
 		if playerId == "" {
 			continue
 		}
+
 		index := strings.Index(playerId, "__")
 		realPlayerId := playerId[index+2:]
-		//realPlayerId := playerId
-		var ret struct {
-			PassportId string `gorm:"column:passport_id"`
+		if strings.Contains(playerId, "ios_jinshanApple") {
+			index = strings.Index(playerId, "__")
+			realPlayerId = playerId[index+2:]
 		}
-		err := db.Table("SDK_EXP_PLAYER").Where("exp_player_id=?", realPlayerId).Select("passport_id").First(&ret).Error
-		if err != nil {
-			if errors.Is(gorm.ErrRecordNotFound, err) {
-				fmt.Printf("No record found: %s", playerId)
-				continue
-			}
-			fmt.Printf("query from db error: %v", err)
-			return
-		}
-		if !common.IsDigit(ret.PassportId) {
-			//fmt.Printf("passport_id is not phone number: %s \n", ret.PassportId)
-			continue
-		} else {
-			retMap[playerId] = ret.PassportId
+		playerIds = append(playerIds, realPlayerId)
+		originPlayerIds[realPlayerId] = playerId
+	}
+
+	var resultList []Passport
+	err := db.Table("SDK_EXP_PLAYER").Where("exp_player_id in ?", playerIds).Select("passport_id", "exp_player_id").Find(&resultList).Error
+	if err != nil {
+		fmt.Printf("query from db error: %v", err)
+		return
+	}
+
+	for i := range resultList {
+		if common.IsDigit(resultList[i].PassportId) {
+			retMap[resultList[i].PassportId] = originPlayerIds[resultList[i].ExpPlayerId]
 		}
 	}
+
 	if len(retMap) > 0 {
 		writeFile(retMap)
 	} else {
@@ -104,15 +113,22 @@ func writeFile(retMap map[string]string) {
 	//     {"1", "刘备"},
 	//     {"2", "张飞"},
 	// }
+
 	var data [][]string
 	for k, v := range retMap {
-		if v == "" {
+		if v == "" || k == "" {
 			continue
 		}
 		r := []string{k, v}
 		data = append(data, r)
 	}
+
 	//写入数据
 	w.WriteAll(data)
 	w.Flush()
+}
+
+type Passport struct {
+	PassportId  string `gorm:"column:passport_id"`
+	ExpPlayerId string `gorm:"column:exp_player_id"`
 }

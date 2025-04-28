@@ -419,37 +419,73 @@ func TestMap(t *testing.T) {
 	t.Log(properties)
 }
 
-func TestT2(t *testing.T) {
-	for i := range 10 {
-		ttt(i + 1)
+func TestRandom(t *testing.T) {
+	m := make(map[string]string)
+	m["a"] = "1"
+	m["b"] = "2"
+	m["c"] = "3"
+
+	for k, v := range m {
+		t.Log(k, v)
 	}
-}
-
-func ttt(idx int) {
-	fmt.Println("start one: ", idx)
-
-	if idx%2 == 0 {
-		return
-	}
-	defer func() {
-		fmt.Println("end one", idx)
-	}()
-
-	fmt.Println("start two", idx)
 }
 
 func TestT3(t *testing.T) {
-	uri := "/ads/v1/topon?user_id=1240425162510014&trans_id=42a2f14f12e0562e6387955f010ae4bc_4947086_1715054701108&reward_amount=1&reward_name=%E6%BF%80%E5%8A%B1%E5%A5%96%E5%8A%B1&placement_id=b65d874487d9f3&extra_data=018f5132b29c7f3b9de1520a79930281&network_firm_id=8&adsource_id=4947086&scenario_id=&sign=1ff110d93b9a696ff8cc56003747c0ba&ilrd=%7B%22id%22%3A%2242a2f14f12e0562e6387955f010ae4bc_4947086_1715054701108%22%2C%22publisher_revenue%22%3A0.007797289577999999%2C%22currency%22%3A%22CNY%22%2C%22country%22%3A%22CN%22%2C%22adunit_id%22%3A%22b65d874487d9f3%22%2C%22adunit_format%22%3A%22RewardedVideo%22%2C%22precision%22%3A%22exact%22%2C%22network_type%22%3A%22Network%22%2C%22network_placement_id%22%3A%224059031216112767%22%2C%22ecpm_level%22%3A0%2C%22segment_id%22%3A0%2C%22scenario_reward_name%22%3A%22reward_item%22%2C%22scenario_reward_number%22%3A1%2C%22custom_rule%22%3A%7B%22user_id%22%3A%223fc28b1b70e87ab0%22%7D%2C%22network_firm_id%22%3A8%2C%22adsource_id%22%3A%224947086%22%2C%22adsource_index%22%3A30%2C%22adsource_price%22%3A7.797289577999999%2C%22adsource_isheaderbidding%22%3A1%2C%22ext_info%22%3A%7B%22mp%22%3A-1%2C%22is_reward_ad%22%3Afalse%2C%22request_id%22%3A%22hjrevp7cm5nb401%22%2C%22gdt_trans_id%22%3A%2269fac0cebc1491f1c8c4386bbac8fb30%22%2C%22token%22%3A%22%22%7D%2C%22reward_custom_data%22%3A%22018f5132b29c7f3b9de1520a79930281%22%2C%22abtest_id%22%3A486335%2C%22user_load_extra_data%22%3A%7B%22user_id%22%3A%221240425162510014%22%2C%22user_custom_data%22%3A%22018f5132b29c7f3b9de1520a79930281%22%7D%2C%22placement_type%22%3A1%2C%22bid_floor%22%3A0%2C%22ad_source_type%22%3A1%2C%22ad_source_custom_ext%22%3A%22%22%2C%22network_name%22%3A%22Tencent+Ads%22%2C%22show_custom_ext%22%3A%22018f5139efd47230b040adeed56ea132%22%7D"
+	s := []string{"a", "b", "c"}
+ 
+	name := make([]string, 5)
+	name[0] = "0"
+	copy(name[1:], s)
 
-	n, e := url.QueryUnescape(uri)
-	if e != nil {
-		t.Error(e)
+	for idx, v := range s {
+		fmt.Printf("idx: %d, v: %s\n", idx, v)
 	}
-	t.Log(n)
-	n2, e2 := url.QueryUnescape(n)
-	if e2 != nil {
-		t.Error(e2)
+	fmt.Println("----------------")
+	for _, v := range name {
+		fmt.Printf("v: %s\n", v)
 	}
-	t.Log(n2)
+}
 
+func TestNewMap(t *testing.T){
+	m := make((map[string]int))
+	str := "ab0ab0ab0aba0b0ab"
+	for _, v := range str {
+		m[string(v)]++
+	}
+	for k, v := range m {
+		fmt.Printf("k: %s, v: %d\n", k, v)
+	}
+}
+
+func TestMapContains(t *testing.T) {
+	m := map[string]string{
+		"a": "1",
+		"b": "2",
+	}
+	_, ok := m["b"]
+	t.Log(ok)
+}
+
+func TestUrlDecode(t *testing.T) {
+	str := "02%3A00%3A00%3A00%3A00%3A00"
+	if name, err := url.QueryUnescape(str); err != nil{
+		t.Fatal(err)
+	} else {
+		t.Log(name)
+	}
+}
+
+func TestFloat(t *testing.T) {
+	s := "12.24"
+	fv, _ := strconv.ParseFloat(s, 64)
+	fmt.Println(fv)
+	fmt.Println(float32(fv))
+}
+
+func TestStrEqual(t *testing.T) {
+	m := map[string]string{
+		"a": "1",
+		"b": "2",
+	}
+	fmt.Println(m["c"] == "")
 }
